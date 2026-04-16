@@ -1,0 +1,20 @@
+# 忽略学习和对比目录内容，但保留目录本身
+01_learn/*
+02_compare/*
+03_optimize/*
+!01_learn/.gitkeep
+!02_compare/.gitkeep
+!03_optimize/.gitkeep
+!03_optimize/README.md
+
+# 忽略 .claude 配置文件
+.claude/config.yml
+
+# 忽略根目录下的 sample 目录
+sample/
+
+# 忽略 product/sample 和 product/skill 的内容，但保留目录本身
+product/sample/*
+product/skill/*
+!product/sample/.gitkeep
+!product/skill/.gitkeep
