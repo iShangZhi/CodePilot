@@ -1,3 +1,8 @@
+---
+name: git-diff
+description: 对指定工程目录执行 git diff，将原始 diff 转换为结构化变更报告，输出变更文件清单、新增/修改/删除统计及关键变更片段。
+---
+
 # Plugin: git-diff
 
 通用 git diff 执行与结构化输出能力。

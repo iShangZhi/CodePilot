@@ -1,3 +1,8 @@
+---
+name: version-manager
+description: 管理语义化版本目录（vX.Y.Z），维护 latest 软链接和 loop_state.md 状态文件，支持 patch/minor/major 版本号递增。
+---
+
 # Plugin: version-manager
 
 通用语义化版本目录管理能力（vX.Y.Z + latest 软链接 + 状态文件）。

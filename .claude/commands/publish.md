@@ -1,5 +1,5 @@
 ---
-name: /publish
+name: publish
 description: 将最新 Skill 同步至 product/skill/ 和 skill_library（先删后复制）
 ---
 

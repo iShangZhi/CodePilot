@@ -1,3 +1,9 @@
+---
+name: optimize-agent
+description: 根据 diff 报告优化 Skill，归档新版本，更新迭代状态，生成样例产物。输出新版本 Skill 目录、软链接、loop_state.md 及 update_log.md。
+model: claude-opus-4-6
+---
+
 # Optimize Agent — 优化归档阶段
 
 ## 职责

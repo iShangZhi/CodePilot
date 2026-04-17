@@ -1,3 +1,8 @@
+---
+name: project-skill
+description: CodePilot Hub 项目特定后端规范，由 Learn Agent 自动生成和更新，记录从目标工程提取的多模块结构、实体层、Service、Controller 等项目级约定。
+---
+
 # Project Skill — CodePilot Hub（后端）
 
 > 本文件由 Claude Agent 在 Learn 阶段自动生成，记录从目标后端工程中提取的项目特定规范。

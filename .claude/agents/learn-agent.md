@@ -1,3 +1,9 @@
+---
+name: learn-agent
+description: 扫描目标工程识别模块信息，读取 Skill 库规范摘要；Skill 提炼模式下额外解析机制源码与参考工程，产出 learn_report.md。
+model: claude-opus-4-6
+---
+
 # Learn Agent — 学习阶段
 
 ## 职责

@@ -1,3 +1,8 @@
+---
+name: skill-gen-prompt
+description: 机制 Skill 提炼提示词模板，通过源码逆向分析生成可复用的部署 Skill，包含三阶段：源码解析与能力边界识别、Skill 生成、参考工程二次验证。
+---
+
 # 机制 Skill 提炼提示词（源码逆向版）
 
 ## 适用场景

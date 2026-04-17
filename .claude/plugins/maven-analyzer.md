@@ -1,3 +1,8 @@
+---
+name: maven-analyzer
+description: 从任意 Maven 多模块工程目录提取标准化模块元数据，输出模块名、包路径、子模块列表、依赖、基类继承、注解等信息摘要。
+---
+
 # Plugin: maven-analyzer
 
 通用 Maven 多模块工程信息提取能力。

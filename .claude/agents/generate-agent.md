@@ -1,3 +1,9 @@
+---
+name: generate-agent
+description: 读取 Skill 规范和模块需求，生成符合规范的后端 Java 代码并直接写入目标工程。仅在代码生成模式下执行，输出新增/修改文件清单摘要。
+model: claude-opus-4-6
+---
+
 # Generate Agent — 代码生成阶段
 
 ## 职责

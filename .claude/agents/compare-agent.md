@@ -1,3 +1,9 @@
+---
+name: compare-agent
+description: 对目标工程执行 git diff，与参考工程和 Skill 规范对比，输出结构化差异报告。仅在代码生成模式下执行，产出 diff_report.md。
+model: claude-opus-4-6
+---
+
 # Compare Agent — 对比校验阶段
 
 ## 职责
