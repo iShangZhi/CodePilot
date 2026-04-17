@@ -42,8 +42,9 @@
 
 | 模式 | 主线 |
 |------|------|
+| `[x] 导入 Skill` | 主线零：从 Skill 库复制到 product/skills/ → 停止 |
 | `[x] Skill 提炼` | 主线一：派发 Extract Agent → 停止 |
-| `[x] 代码生成` | 主线二：派发 Generate → Compare → 停止；按需 Patch |
+| `[x] 代码生成` | 主线二：派发 Generate → 停止；按需 Patch |
 
 **目标工程多模块写入规律：**
 
@@ -53,6 +54,43 @@
 ├── {模块名}-core/src/main/java/{包路径}/core/     ← Entity、Service、Controller
 ├── {模块名}-core/src/main/java/{包路径}/resource/ ← i18n、module.properties
 └── {模块名}-client/src/main/java/{包路径}/client/ ← Client 封装
+```
+
+---
+
+## 零点五、主线零 · 导入 Skill
+
+```
+Skill 库 → 复制到 product/skills/ → 版本初始化 → 停止，人工编辑优化
+```
+
+**适用场景**：Skill 库中已有现成 SKILL，想导入到本项目做针对性调整，而不是从源码重新提炼。
+
+**前置检查**：`module.md` 中「导入路径」字段已填写（至少一条）。
+
+**执行步骤（Orchestrator 直接执行，不派发 Agent）：**
+
+对 `module.md` 中每条「导入路径」依次处理：
+
+1. **确定输出目录名**：取路径最后一段（如 `MK开发流程/MK后端权限机制部署` → `MK后端权限机制部署`）
+2. **检查目标是否已存在**：若 `product/skills/{输出目录名}/loop_state.md` 已存在，读取当前版本号，本次版本 patch +1；否则版本号为 `v1.0.0`
+3. **复制文件**：将 `{skill_library}/{导入路径}/SKILL.md` 和 `{skill_library}/{导入路径}/references/`（若存在）完整复制到 `product/skills/{输出目录名}/vX.Y.Z/`
+4. **更新软链接**：`product/skills/{输出目录名}/latest` → `vX.Y.Z/`
+5. **初始化/追加状态文件**：
+   - `loop_state.md`：写入当前版本 + 追加历史记录行（`vX.Y.Z | 导入自 {导入路径} | {日期}`）
+   - `update_log.md`：追加本次操作记录（来源路径、版本、日期）
+
+**完成后输出：**
+
+```
+## Skill 导入完成
+| 输出目录名 | 版本 | 来源 |
+|-----------|------|------|
+| MK后端权限机制部署 | v1.0.0 | MK开发流程/MK后端权限机制部署 |
+| ...       | ...  | ...  |
+
+路径：product/skills/{输出目录名}/latest/
+如需优化，直接编辑 latest/SKILL.md 后回复「启动 CodePilot」重新生成验证。
 ```
 
 ---
@@ -131,6 +169,7 @@ SKILL → [Generate] → 代码 → 停止，人工审查 → 对话指定修订
 
 | Agent | 主线 | 输入 | 输出 |
 |-------|------|------|------|
+| —（Orchestrator 直接执行） | 导入 Skill | Skill 库路径列表 | `product/skills/{名}/vX.Y.Z/` + 状态文件 |
 | Extract Agent | Skill 提炼 | 机制源码 + 参考工程 | `product/skills/{名}/vX.Y.Z/` |
 | Generate Agent | 代码生成 | `latest/SKILL.md` + 任务描述 | `{target_project}/` 生成文件 + 文件清单（≤ 200 行） |
 | Patch Agent | 代码生成（按需） | 用户修订描述 + `latest/` | `product/skills/{名}/vX.Y.Z/`（≤ 80 行摘要） |
