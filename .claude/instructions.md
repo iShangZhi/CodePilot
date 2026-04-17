@@ -35,17 +35,14 @@
 
 > 若 `loop_state.md` 显示「未开始」，则为第 1 轮，从头执行完整流程。
 
-**读取 `00_workspace/input/module.md` 判断执行模式与项目类型：**
+**读取 `00_workspace/input/module.md` 判断执行模式：**
 
 | 判断条件 | 执行路径 |
 |---------|---------|
-| `Skill 提炼配置` 区块有内容 | Skill 提炼模式：派发 Learn Agent（含机制解析）→ Optimize Agent → 终止判断，跳过 Generate / Compare |
-| `Skill 提炼配置` 区块为空 | 代码生成模式（默认）：顺序派发 Learn → Generate → Compare → Optimize → 终止判断 |
+| `[x] Skill 提炼` | Skill 提炼模式：派发 Learn Agent（含机制解析）→ Optimize Agent → 终止判断，跳过 Generate / Compare |
+| `[x] 代码生成` | 代码生成模式：顺序派发 Learn → Generate → Compare → Optimize → 终止判断 |
 
-| 项目类型 | 判断条件 | Generate 策略 |
-|---------|---------|--------------|
-| 全新项目 | `[x] 全新项目` | 全量生成所有文件 |
-| 增量项目 | `[x] 增量项目` | 只新增/修改指定部分，已有文件不覆盖 |
+> Generate 策略固定为增量：只新增/修改，已有文件不覆盖。
 
 **循环控制（防死循环）：**
 
