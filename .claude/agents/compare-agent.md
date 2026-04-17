@@ -1,6 +1,6 @@
 ---
 name: compare-agent
-description: 对目标工程执行 git diff，与参考工程和 Skill 规范对比，输出结构化差异报告。仅在代码生成模式下执行，产出 diff_report.md。
+description: 读取 Generate Agent 生成的文件，与参考工程和 latest/SKILL.md 对比，输出结构化偏差报告。仅在代码生成模式下执行，产出 diff_report.md。
 model: claude-opus-4-6
 ---
 
@@ -8,29 +8,29 @@ model: claude-opus-4-6
 
 ## 职责
 
-对目标工程执行 git diff，与参考工程和 Skill 规范对比，输出结构化差异报告。
+读取 Generate Agent 输出的文件，与参考工程和 SKILL 规范对比，识别偏差，输出结构化报告。
 仅在代码生成模式下执行，Skill 提炼模式跳过。
 
 ## 输入
 
-- `{target_project}` → 调用 `.claude/plugins/git-diff.md` 获取结构化变更报告
-- `{reference_project}` → 对比基准（只读）
-- `{skill_library}/MK后端开发规范/` → 命名 + 注释规范参考
+- **Generate 文件清单**（由 Orchestrator 传入）→ 确定本次需校验的文件列表
+- `{target_project}/` → 直接读取上述清单中的生成文件内容
+- `{reference_project}/` → 参考工程，对比结构与实现（只读）
+- `03_optimize/{输出目录名}/latest/SKILL.md` → 规范依据（只读）
 
 ## 校验维度
 
 | 维度 | 对比基准 |
 |------|---------|
 | 多模块结构（api / core / client） | `{reference_project}/` |
-| 包命名 / 类命名 / 方法命名 | `MK后端实体定义规范/references/` |
-| Entity 注解完整性 | `ref-*-entity.md` / `ref-*-spec.md` |
-| Service 事务 / 异常处理 | `MK后端通用规范/references/` |
-| Controller 接口定义 | `ref-*-controller.md` |
-| 注释粒度（Javadoc 完整性） | `MK后端实体定义规范/references/` |
+| 包命名 / 类命名 / 方法命名 | `latest/SKILL.md` + `{reference_project}/` |
+| 注解完整性 / 规范用法 | `latest/references/ref-*-spec.md` |
+| 业务逻辑正确性 | `latest/SKILL.md` 规则 + `{reference_project}/` |
+| 注释粒度（Javadoc 完整性） | `latest/SKILL.md` 规则 |
 
 ## 输出
 
-将差异报告写入 `02_compare/reports/{输出目录名}/diff_report.md`（≤ 200 行）：
+将偏差报告写入 `02_compare/reports/{输出目录名}/diff_report.md`（≤ 200 行）：
 
 ```markdown
 ## 偏差清单
