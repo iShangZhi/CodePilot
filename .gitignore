@@ -1,20 +1,9 @@
-# 忽略学习和对比目录内容，但保留目录本身
-01_learn/*
-02_compare/*
-03_optimize/*
-!01_learn/.gitkeep
-!02_compare/.gitkeep
-!03_optimize/.gitkeep
-!03_optimize/README.md
-
-# 忽略 .claude 配置文件
+# ── 本地路径配置（含敏感路径，不入库）──────────────────────────────────
 .claude/config.yml
+.claude/settings.local.json
 
-# 忽略根目录下的 sample 目录
-sample/
+# ── SKILL 历史版本（只保留 latest 软链接和状态文件）──────────────────
+product/skills/*/v*/
 
-# 忽略 product/sample 和 product/skill 的内容，但保留目录本身
-product/sample/*
-product/skill/*
-!product/sample/.gitkeep
-!product/skill/.gitkeep
+# ── macOS ────────────────────────────────────────────────────────────
+.DS_Store
