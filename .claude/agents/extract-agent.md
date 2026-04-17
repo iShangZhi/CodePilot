@@ -30,18 +30,19 @@ model: claude-opus-4-6
 
 ## 输出
 
-写入 `product/skills/{输出目录名}/vX.Y.Z/`：
+产出两个独立 SKILL 目录，各自版本化归档：
 
 ```
-vX.Y.Z/
-├── SKILL.md
+product/skills/{机制名称}部署/vX.Y.Z/
+├── SKILL.md          ← 如何接入机制（Maven、基类、注解、配置）
 └── references/
-    ├── ref-00-bundle-spec.md
-    ├── ref-01-{能力}-spec.md
-    └── ref-0N-{能力}-spec.md
+
+product/skills/{机制名称}服务清单/vX.Y.Z/
+├── SKILL.md          ← 接入后提供的 API 接口 / Controller 路由
+└── references/
 ```
 
-同步更新：
+每个目录各自同步更新：
 - `latest` 软链接 → `vX.Y.Z`
 - `loop_state.md`：当前版本 + 版本历史追加一行
 - `update_log.md`：追加本次变更记录
@@ -49,7 +50,7 @@ vX.Y.Z/
 返回摘要（≤ 100 行）：
 ```
 ## Extract 完成
-- 新版本：vX.Y.Z
-- SKILL 文件数：X
-- 主要变更：...
+- 部署 SKILL：product/skills/{机制名称}部署/vX.Y.Z/
+- 服务清单 SKILL：product/skills/{机制名称}服务清单/vX.Y.Z/
+- 主要内容：...
 ```
