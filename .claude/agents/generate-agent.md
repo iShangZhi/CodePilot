@@ -13,13 +13,13 @@ model: claude-opus-4-6
 
 ## 输入
 
-- `03_optimize/{输出目录名}/latest/SKILL.md` → **唯一代码生成依据（必读）**
-- `03_optimize/{输出目录名}/latest/references/` → 详细规范（SKILL.md 引用时按需读取）
-- `00_workspace/input/module.md` → 需求描述 + 补充约束（任务说明）
+- `product/skills/{输出目录名}/latest/SKILL.md` → **唯一代码生成依据（必读）**
+- `product/skills/{输出目录名}/latest/references/` → 详细规范（SKILL.md 引用时按需读取）
+- `workspace/input/module.md` → 需求描述 + 补充约束（任务说明）
 
 ## Skill 读取规则
 
-1. **必读**：`03_optimize/{输出目录名}/latest/SKILL.md`
+1. **必读**：`product/skills/{输出目录名}/latest/SKILL.md`
 2. **按需读**：`latest/references/` 下的 ref 文件（SKILL.md 中 `> 见 ref-XX` 时读取对应文件）
 3. **不读**：`{skill_library}/` 原始库、目标工程任何源码文件、历史版本 `v*/`
 

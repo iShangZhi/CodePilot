@@ -22,15 +22,15 @@
 | 参考工程 | `paths.reference_project` | 对比基准 + Skill 提炼案例来源，只读 |
 | Skill 库 | `paths.skill_library` | 只读 |
 
-**读取 `00_workspace/input/module.md`，获取：**
+**读取 `workspace/input/module.md`，获取：**
 
 | 字段 | 用途 |
 |------|------|
 | 执行模式 | 决定走哪条主线 |
-| 输出目录名 | 定位 `03_optimize/{输出目录名}/` 下的 SKILL 和状态文件 |
+| 输出目录名 | 定位 `product/skills/{输出目录名}/` 下的 SKILL 和状态文件 |
 | 本次任务描述 | 传给对应 Agent |
 
-**读取 `03_optimize/{输出目录名}/loop_state.md`，获取：**
+**读取 `product/skills/{输出目录名}/loop_state.md`，获取：**
 
 | 字段 | 用途 |
 |------|------|
@@ -75,7 +75,7 @@
 ```
 ## Skill 提炼完成
 - 版本：vX.Y.Z
-- 路径：03_optimize/{输出目录名}/latest/
+- 路径：product/skills/{输出目录名}/latest/
 - 主要内容：...
 
 如需调整，直接编辑 latest/SKILL.md 后回复「启动 CodePilot」重新生成验证。
@@ -91,7 +91,7 @@ SKILL → [Generate] → 代码 → 停止，人工审查 → 对话指定修订
 
 ### Step 1 · Generate
 
-**前置检查：** `03_optimize/{输出目录名}/latest/SKILL.md` 必须存在；否则停止，提示先执行 Skill 提炼。
+**前置检查：** `product/skills/{输出目录名}/latest/SKILL.md` 必须存在；否则停止，提示先执行 Skill 提炼。
 
 **派发 Generate Agent**（完整提示词见 `.claude/agents/generate-agent.md`），传入：
 - `latest/SKILL.md` 路径
@@ -131,9 +131,9 @@ SKILL → [Generate] → 代码 → 停止，人工审查 → 对话指定修订
 
 | Agent | 主线 | 输入 | 输出 |
 |-------|------|------|------|
-| Extract Agent | Skill 提炼 | 机制源码 + 参考工程 | `03_optimize/{名}/vX.Y.Z/` |
+| Extract Agent | Skill 提炼 | 机制源码 + 参考工程 | `product/skills/{名}/vX.Y.Z/` |
 | Generate Agent | 代码生成 | `latest/SKILL.md` + 任务描述 | `{target_project}/` 生成文件 + 文件清单（≤ 200 行） |
-| Patch Agent | 代码生成（按需） | 用户修订描述 + `latest/` | `03_optimize/{名}/vX.Y.Z/`（≤ 80 行摘要） |
+| Patch Agent | 代码生成（按需） | 用户修订描述 + `latest/` | `product/skills/{名}/vX.Y.Z/`（≤ 80 行摘要） |
 
 **通信约定：**
 - 主 Agent 只通过文件与子 Agent 交接，不直接传递原始源码

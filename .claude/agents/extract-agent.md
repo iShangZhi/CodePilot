@@ -1,6 +1,6 @@
 ---
 name: extract-agent
-description: 读取机制源码和参考工程，逆向提炼可复用 SKILL，直接写入 03_optimize/{输出目录名}/vX.Y.Z/。不产生中间文件。
+description: 读取机制源码和参考工程，逆向提炼可复用 SKILL，直接写入 product/skills/{输出目录名}/vX.Y.Z/。不产生中间文件。
 model: claude-opus-4-6
 ---
 
@@ -12,10 +12,10 @@ model: claude-opus-4-6
 
 ## 输入
 
-- `00_workspace/input/module.md` → 输出目录名、机制源码路径、分析子模块路径
+- `workspace/input/module.md` → 输出目录名、机制源码路径、分析子模块路径
 - `{mechanism_source}/` → 机制源码（只读）
 - `{reference_project}/{分析子模块}/` → 参考工程案例（只读）
-- `03_optimize/{输出目录名}/latest/SKILL.md` → 当前版本（若存在，作为增量基准；首次提炼则不存在）
+- `product/skills/{输出目录名}/latest/SKILL.md` → 当前版本（若存在，作为增量基准；首次提炼则不存在）
 - 本轮版本号（由 Orchestrator 传入）
 
 ## 执行步骤
@@ -30,7 +30,7 @@ model: claude-opus-4-6
 
 ## 输出
 
-写入 `03_optimize/{输出目录名}/vX.Y.Z/`：
+写入 `product/skills/{输出目录名}/vX.Y.Z/`：
 
 ```
 vX.Y.Z/

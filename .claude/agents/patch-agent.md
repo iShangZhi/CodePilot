@@ -13,7 +13,7 @@ model: claude-opus-4-6
 ## 输入
 
 - 用户在对话中描述的修订内容（由 Orchestrator 整理后传入）
-- `03_optimize/{输出目录名}/latest/` → 当前 SKILL（只读基准）
+- `product/skills/{输出目录名}/latest/` → 当前 SKILL（只读基准）
 - 本轮版本号（由 Orchestrator 传入）
 
 ## 执行步骤
@@ -24,7 +24,7 @@ model: claude-opus-4-6
 
 ## 输出
 
-写入 `03_optimize/{输出目录名}/vX.Y.Z/`（仅修改涉及修订的文件，其余原样复制）
+写入 `product/skills/{输出目录名}/vX.Y.Z/`（仅修改涉及修订的文件，其余原样复制）
 
 同步更新：
 - `latest` 软链接 → `vX.Y.Z`
