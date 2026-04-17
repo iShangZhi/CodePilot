@@ -141,18 +141,22 @@ description: 机制 Skill 提炼提示词模板。每个机制提炼产出两个
 
 2. **生成 SKILL.md**，按序包含：
    - frontmatter：name = `{机制名称}服务清单`；description 说明机制提供哪些业务能力
+   - **零、Maven 依赖**：调用方需要引入的依赖声明（groupId / artifactId / 引入模块 / 是否继承 BOM）
    - **一、服务概览**：表格列出所有 API 接口 / Controller 路由，标注用途和调用时机
    - **二、API 接口清单**：按接口分组，每个接口列出方法签名、参数语义、返回值、使用场景
    - **三、Controller 路由清单**：按功能分组，每条路由列出 HTTP 方法 + 路径 + 请求/响应结构
    - **四、使用约束**：调用前提条件、权限要求、事务边界说明
 
 3. **生成 references/**：
+   - **ref-00-bundle-spec.md**：调用方代码中涉及的所有包导入，按依赖层分组，附调用方所需的完整 Maven 依赖片段；
+     所有后续 ref 文件的代码块只保留本类自模块的导入，跨模块导入统一在此声明
    - 每个主要接口或路由分组对应一个 ref 文件，包含完整方法签名和调用示例代码
 
 4. **输出目录**：
    product/skills/{机制名称}服务清单/
    ├── SKILL.md
    └── references/
+       ├── ref-00-bundle-spec.md
        ├── ref-01-{接口组语义}-api.md
        └── ref-0N-{路由组语义}-controller.md
 ```
