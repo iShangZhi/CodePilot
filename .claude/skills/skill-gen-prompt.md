@@ -30,6 +30,10 @@ description: 机制 Skill 提炼提示词模板。每个机制提炼产出两个
 - Service public 方法（供其他 Service/Controller 调用的非框架接口方法）
 - **不包含**框架已定义的标准端点（这些在部署 SKILL 中说明）
 
+**两个 SKILL 均不标注 `@OperLog`**：
+- `@OperLog` 属于业务个性化配置（记录哪些操作、日志级别），由开发者根据实际需求自行添加
+- SKILL 中的代码模板和端点描述一律省略 `@OperLog`，避免生成代码时产生冗余或错误的日志配置
+
 ---
 
 ## 第一阶段：源码解析
@@ -146,7 +150,7 @@ description: 机制 Skill 提炼提示词模板。每个机制提炼产出两个
    - **五、占位符说明**：所有占位符、含义、示例（统一用 KmNews 体系）
 
 3. **生成 references/**：
-   - **ref-00-bundle-spec.md**：所有 ref 涉及的跨模块包导入，按依赖层分组，附完整 Maven 片段
+   - **ref-00-bundle-spec.md**：所有 ref 涉及的跨模块包导入，按依赖层分组（**不含 Maven 片段**，Maven 依赖只在 SKILL.md 的部署流程中展示）
    - **有 Entity 的能力**：以 Entity 为切入点，在同一 ref 文件依次补全 VO → API（框架接口声明）→ Repository（框架扩展查询）→ Service（框架方法实现）→ Controller（框架 default 方法声明）；
      机制能力后缀用 `-spec`，引擎集成后缀用 `-integration`
    - **无 Entity 的独立能力**：每个能力单独一个 ref 文件
@@ -198,7 +202,7 @@ description: 机制 Skill 提炼提示词模板。每个机制提炼产出两个
    - 以**实体域**为第一维度划分：每个核心实体（Category、Template 等）对应一个 ref 文件，该文件同时包含该实体的 API 接口方法 + Controller 端点（API 与 Controller 同属一个实体，合并在一个文件中，避免层次割裂）
    - **Service public 方法** 独立一个 ref 文件（跨实体的内部调用逻辑，不属于接口层）
    - **工具类** 独立一个 ref 文件（含完整代码模板，如无工具类则省略）
-   - **ref-00-bundle-spec.md**（必须）：调用方所需的跨模块 DTO/VO/枚举类型声明 + Maven 依赖片段；后续 ref 文件的代码块只保留本模块导入，跨模块导入统一在此声明
+   - **ref-00-bundle-spec.md**（必须）：调用方所需的跨模块 DTO/VO/枚举类型声明（**不含 Maven 依赖**，Maven 依赖在部署 SKILL 的 SKILL.md 中已说明）；后续 ref 文件的代码块只保留本模块导入，跨模块导入统一在此声明
 
    **ref 文件内容规范**：
    - API 方法：列出方法签名（接口全限定名 + 方法签名 + 参数语义 + 返回语义）
@@ -209,7 +213,7 @@ description: 机制 Skill 提炼提示词模板。每个机制提炼产出两个
    product/skills/{机制名称}服务清单/
    ├── SKILL.md                              ← 索引：概览表 + 权限速查
    └── references/
-       ├── ref-00-bundle-spec.md             ← 跨模块类型声明 + Maven 依赖
+       ├── ref-00-bundle-spec.md             ← 跨模块类型声明（不含 Maven 依赖）
        ├── ref-01-{实体A}-custom.md          ← 实体A：API 方法 + Controller 端点
        ├── ref-02-{实体B}-custom.md          ← 实体B：API 方法 + Controller 端点
        ├── ref-03-service-methods.md         ← 全部 Service public 方法
