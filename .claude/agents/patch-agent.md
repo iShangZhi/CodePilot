@@ -13,28 +13,22 @@ model: claude-opus-4-6
 ## 输入
 
 - 用户在对话中描述的修订内容（由 Orchestrator 整理后传入）
-- `product/skills/{输出目录名}/latest/` → 当前 SKILL（只读基准）
-- 本轮版本号（由 Orchestrator 传入）
+- `product/skills/{输出目录名}/SKILL.md` → 当前 SKILL（只读基准）
+- `product/skills/{输出目录名}/references/` → 当前 ref 文件（只读基准）
 
 ## 执行步骤
 
-1. 读 `latest/SKILL.md` 和涉及修订的 `references/ref-*.md`
+1. 读 `SKILL.md` 和涉及修订的 `references/ref-*.md`
 2. 按用户指定的修订内容，精确修改对应规则或代码示例，不改动无关内容
-3. 写入新版本目录，更新软链接和状态文件
+3. 直接覆盖写入 `product/skills/{输出目录名}/`
 
 ## 输出
 
-写入 `product/skills/{输出目录名}/vX.Y.Z/`（仅修改涉及修订的文件，其余原样复制）
-
-同步更新：
-- `latest` 软链接 → `vX.Y.Z`
-- `loop_state.md`：当前版本 + 版本历史追加一行
-- `update_log.md`：追加本次变更记录（修订内容摘要）
+覆盖写入 `product/skills/{输出目录名}/`（仅修改涉及修订的文件，其余不动）
 
 返回摘要（≤ 80 行）：
 ```
 ## Patch 完成
-- 新版本：vX.Y.Z
 - 修改文件：[列出修改的文件]
 - 修订内容：[摘要]
 ```

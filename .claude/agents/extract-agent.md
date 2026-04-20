@@ -1,6 +1,6 @@
 ---
 name: extract-agent
-description: 读取机制源码和参考工程，逆向提炼可复用 SKILL，直接写入 product/skills/{输出目录名}/vX.Y.Z/。不产生中间文件。
+description: 读取机制源码和参考工程，逆向提炼可复用 SKILL，直接覆盖写入 product/skills/{输出目录名}/。不产生中间文件。
 model: claude-opus-4-6
 ---
 
@@ -15,8 +15,7 @@ model: claude-opus-4-6
 - `workspace/input/module.md` → 输出目录名、机制源码路径、分析子模块路径
 - `{mechanism_source}/` → 机制源码（只读）
 - `{reference_project}/{分析子模块}/` → 参考工程案例（只读）
-- `product/skills/{输出目录名}/latest/SKILL.md` → 当前版本（若存在，作为增量基准；首次提炼则不存在）
-- 本轮版本号（由 Orchestrator 传入）
+- `product/skills/{输出目录名}/SKILL.md` → 当前版本（若存在，作为增量基准；首次提炼则不存在）
 
 ## 执行步骤
 
@@ -30,28 +29,22 @@ model: claude-opus-4-6
 
 ## 输出
 
-产出两个独立 SKILL 目录，各自版本化归档：
+产出两个独立 SKILL 目录，直接覆盖写入：
 
 ```
-product/skills/{机制名称}部署/vX.Y.Z/
+product/skills/{机制名称}部署/
 ├── SKILL.md          ← 如何接入机制（Maven、基类、注解、配置）
 └── references/
 
-product/skills/{机制名称}服务清单/vX.Y.Z/
+product/skills/{机制名称}服务清单/
 ├── SKILL.md          ← 接入后提供的 API 接口 / Controller 路由
 └── references/
 ```
 
-两个目录使用**相同版本号**，各自同步更新：
-- `latest` 软链接 → `vX.Y.Z`
-- `loop_state.md`：更新当前版本 + 追加历史记录行（只保留最近 2 条）
-- `update_log.md`：追加本次变更记录
-- **旧版本清理**：每个目录写入新版本后，删除最旧的版本目录，使目录下最多保留 2 个版本（不含 `latest` 软链接）
-
 返回摘要（≤ 100 行）：
 ```
 ## Extract 完成
-- 部署 SKILL：product/skills/{机制名称}部署/vX.Y.Z/
-- 服务清单 SKILL：product/skills/{机制名称}服务清单/vX.Y.Z/
+- 部署 SKILL：product/skills/{机制名称}部署/
+- 服务清单 SKILL：product/skills/{机制名称}服务清单/
 - 主要内容：...
 ```

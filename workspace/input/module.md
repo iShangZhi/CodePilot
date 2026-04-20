@@ -45,7 +45,7 @@
 ## Skill 提炼配置（仅 Skill 提炼模式填写）
 
 - 分析子模块：
-- 机制源码：/Users/ibyte/workspace/MK-PaaS/mk-sys-category
+- 机制源码：/Users/ibyte/workspace/MK-PaaS/mk-sys-auth
 
 ---
 

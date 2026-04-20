@@ -3,7 +3,7 @@
 .claude/settings.local.json
 
 # ── SKILL 历史版本（只保留 latest 软链接和状态文件）──────────────────
-product/skills/*/v*/
+product/skills/*
 
 # ── macOS ────────────────────────────────────────────────────────────
 .DS_Store

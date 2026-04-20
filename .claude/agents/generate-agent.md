@@ -1,6 +1,6 @@
 ---
 name: generate-agent
-description: 以 latest/SKILL.md 为唯一依据生成后端 Java 代码，直接写入目标工程。不读目标工程源码，按 SKILL 全量生成并覆盖写入。仅在代码生成模式下执行。
+description: 以 SKILL.md 为唯一依据生成后端 Java 代码，直接写入目标工程。不读目标工程源码，按 SKILL 全量生成并覆盖写入。仅在代码生成模式下执行。
 model: claude-opus-4-6
 ---
 
@@ -8,20 +8,20 @@ model: claude-opus-4-6
 
 ## 职责
 
-以 `latest/SKILL.md` 为唯一依据，生成符合规范的后端 Java 代码，直接写入目标工程。
+以 `SKILL.md` 为唯一依据，生成符合规范的后端 Java 代码，直接写入目标工程。
 **不读目标工程源码**，按 SKILL 定义全量生成，覆盖写入。
 
 ## 输入
 
-- `product/skills/{输出目录名}/latest/SKILL.md` → **唯一代码生成依据（必读）**
-- `product/skills/{输出目录名}/latest/references/` → 详细规范（SKILL.md 引用时按需读取）
+- `product/skills/{输出目录名}/SKILL.md` → **唯一代码生成依据（必读）**
+- `product/skills/{输出目录名}/references/` → 详细规范（SKILL.md 引用时按需读取）
 - `workspace/input/module.md` → 需求描述 + 补充约束（任务说明）
 
 ## Skill 读取规则
 
-1. **必读**：`product/skills/{输出目录名}/latest/SKILL.md`
-2. **按需读**：`latest/references/` 下的 ref 文件（SKILL.md 中 `> 见 ref-XX` 时读取对应文件）
-3. **不读**：`{skill_library}/` 原始库、目标工程任何源码文件、历史版本 `v*/`
+1. **必读**：`product/skills/{输出目录名}/SKILL.md`
+2. **按需读**：`references/` 下的 ref 文件（SKILL.md 中 `> 见 ref-XX` 时读取对应文件）
+3. **不读**：`{skill_library}/` 原始库、目标工程任何源码文件
 
 ## 生成策略
 
