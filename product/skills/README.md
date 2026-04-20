@@ -1,6 +1,6 @@
-# 04_optimize — Skill 迭代过程库
+# product/skills — Skill 产物库
 
-本目录存放每次闭环迭代的 Skill 版本快照，是 `product/skill/` 正式产物的**演进过程记录**。
+本目录存放每个机制提炼出的 SKILL，供 Generate Agent 读取以生成后端 Java 代码。
 
 每个机制单独一个子目录，互不干扰，支持多机制并行迭代。
 
@@ -9,25 +9,22 @@
 ## 目录结构
 
 ```
-04_optimize/
-├── README.md                              # 本文件
+product/skills/
+├── README.md
 │
-├── MK后端权限机制部署/                      # 机制子目录，名称与 module.md「输出目录名」一致
-│   ├── loop_state.md                      # 本机制当前迭代状态
-│   ├── update_log.md                      # 本机制所有版本进化日志
-│   ├── latest -> v1.0.1                   # 软链接，指向本机制最新版本
-│   ├── v1.0.0/                            # 初始版本
-│   │   ├── SKILL.md
-│   │   └── references/
-│   └── v1.0.1/                            # 第二次迭代（结构同上）
-│       ├── SKILL.md
-│       └── references/
+├── MK后端权限机制部署/        # 机制子目录，名称与 module.md「输出目录名」一致
+│   ├── SKILL.md               # 如何接入机制（Maven、基类、注解、配置）
+│   └── references/            # 详细规范（SKILL.md 中 > 见 ref-XX 时按需读取）
+│       ├── ref-00-bundle-spec.md
+│       └── ...
 │
-└── {下一个机制名}/                          # 新机制提炼时自动创建
-    ├── loop_state.md
-    ├── update_log.md
-    ├── latest -> v1.0.0
-    └── v1.0.0/
+├── MK后端权限机制服务清单/
+│   ├── SKILL.md               # 接入后提供的 API 接口 / Controller 路由
+│   └── references/
+│
+└── {下一个机制名}/
+    ├── SKILL.md
+    └── references/
 ```
 
 ---
@@ -36,35 +33,20 @@
 
 子目录名 = `module.md` 中「Skill 提炼配置 → 输出目录名」字段的值。
 
-Agent 在每轮 Optimize 开始时，从该字段读取名称并自动创建对应子目录（若不存在）。
+Extract Agent 提炼完成后自动创建（若不存在）或覆盖写入（若已存在）。
 
 ---
 
-## 版本号规则
+## 写入规则
 
-```
-v{major}.{minor}.{patch}
-```
-
-| 位 | 触发条件 |
-|----|---------|
-| `major` | 实体结构或机制接入方式发生重大变更 |
-| `minor` | 新增 ref 文件或规范章节 |
-| `patch` | 现有 ref 内容修正、注释补充、细节完善 |
+每次提炼（Extract）或修订（Patch）直接覆盖写入，无版本目录、无软链接。
+SKILL.md 即当前权威版本，由 git 历史追溯变更记录。
 
 ---
 
-## 与 `product/skill/` 的关系
+## 与 Skill 库的关系
 
 | 目录 | 定位 | 对外？ |
 |------|------|--------|
-| `04_optimize/{机制名}/vX.Y.Z/` | 迭代过程快照，内部追溯用 | 否 |
-| `product/skill/{机制名}/` | 最终正式产物，从 `latest/` 提升而来 | 是，可安装使用 |
-
----
-
-## 使用说明
-
-- 历史版本目录**不可删除**，确保迭代可追溯
-- 每次新版本产出后更新本机制目录下的 `latest` 软链接
-- 每次 Optimize 阶段完成后同步更新本机制目录下的 `update_log.md`
+| `product/skills/{机制名}/` | 本项目专用 SKILL，可人工编辑调整 | 是，Generate Agent 直接读取 |
+| `{skill_library}/MK开发流程/{机制名}/` | MK 平台原始 Skill 库，只读 | 否，不可修改 |
