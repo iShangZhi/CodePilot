@@ -11,6 +11,7 @@ CodePilot 是 Skill 自进化驱动的 Java 后端代码生成平台。
 
 ---
 
+
 ## 核心约束
 
 1. **路径来源**：所有外部路径从 `.claude/config.yml` 的 `paths` 区块读取，不硬编码
