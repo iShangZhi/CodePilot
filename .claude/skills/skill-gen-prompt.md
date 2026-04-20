@@ -11,10 +11,24 @@ description: 机制 Skill 提炼提示词模板。每个机制提炼产出两个
 
 | SKILL | 目录 | 面向 | 内容 |
 |-------|------|------|------|
-| 部署 | `product/skills/{机制名称}部署/` | 集成机制的开发者 | Maven 依赖、基类继承、注解、配置 |
-| 服务清单 | `product/skills/{机制名称}服务清单/` | 调用机制能力的业务代码 | 机制暴露的 API 接口、Controller 路由、Service 方法签名 |
+| 部署 | `product/skills/{机制名称}部署/` | 集成机制的开发者 | Maven 依赖、框架基类继承、框架注解、标准 CRUD 配置 |
+| 服务清单 | `product/skills/{机制名称}服务清单/` | 调用机制能力的业务代码 | 业务自定义 API 接口、自定义 Controller 端点（含实现）、Service public 方法 |
 
 > 两个 SKILL 共用同一轮源码解析结果（第一阶段），分别在第二阶段生成。
+
+### 关键边界原则
+
+**部署 SKILL 只包含「如何接入框架」**：
+- 框架提供的基类、接口、注解，以及如何继承/实现它们
+- 框架自动暴露的标准端点（CrudController / CombineController / CategoryController 等 default 方法）
+- 框架要求的必填配置、i18n key、Maven 依赖
+- **不包含**业务自定义的 API 方法、Controller 端点、Service 业务方法
+
+**服务清单 SKILL 只包含「接入后业务层自己写的」**：
+- 业务 API 接口中自定义的方法（非继承自框架的）
+- Controller 中自定义的端点（非框架 default 的）及其权限注解实现
+- Service public 方法（供其他 Service/Controller 调用的非框架接口方法）
+- **不包含**框架已定义的标准端点（这些在部署 SKILL 中说明）
 
 ---
 
@@ -103,6 +117,21 @@ description: 机制 Skill 提炼提示词模板。每个机制提炼产出两个
 ```
 基于第一阶段的**部署侧能力**分析，生成 {机制名称}部署 SKILL：
 
+**边界约束**：只写「框架层」的内容——继承什么、实现什么、加什么注解、配什么依赖。
+不写业务自定义的 API 方法、Controller 端点、Service 业务方法（这些属于服务清单 SKILL）。
+
+对于 API 接口层：
+- **写**：继承哪个框架接口（如 ICategoryApi<VO>），框架接口提供了哪些标准方法
+- **不写**：业务自己在接口里扩展的方法（如 copy、loadParentNode 等）
+
+对于 Controller 层：
+- **写**：implements 哪个框架 Controller（如 CategoryController），框架 default 方法有哪些
+- **不写**：业务自定义的端点（如 /copy、/findCategoryTree 等）
+
+对于 Service 层：
+- **写**：继承框架基类（如 AbstractServiceImpl），实现框架接口（如 ICategoryService），框架要求的方法（如 getEntityManager）
+- **不写**：业务自定义的 public 方法（如 fillTreeNodeParent、copyByCategory 等）
+
 1. **业务代码剥离**：模块名、业务字段、业务方法名替换为占位符（规范见文末）
 
 2. **生成 SKILL.md**，按序包含：
@@ -118,7 +147,7 @@ description: 机制 Skill 提炼提示词模板。每个机制提炼产出两个
 
 3. **生成 references/**：
    - **ref-00-bundle-spec.md**：所有 ref 涉及的跨模块包导入，按依赖层分组，附完整 Maven 片段
-   - **有 Entity 的能力**：以 Entity 为切入点，在同一 ref 文件依次补全 VO → API → Repository → Service → Controller；
+   - **有 Entity 的能力**：以 Entity 为切入点，在同一 ref 文件依次补全 VO → API（框架接口声明）→ Repository（框架扩展查询）→ Service（框架方法实现）→ Controller（框架 default 方法声明）；
      机制能力后缀用 `-spec`，引擎集成后缀用 `-integration`
    - **无 Entity 的独立能力**：每个能力单独一个 ref 文件
 
@@ -136,34 +165,55 @@ description: 机制 Skill 提炼提示词模板。每个机制提炼产出两个
 ### 2-B 生成 `{机制名称}服务清单` SKILL
 
 ```
-基于第一阶段的**服务侧能力**分析，生成 {机制名称}服务清单 SKILL：
+基于第一阶段的分析，生成 {机制名称}服务清单 SKILL：
+
+**边界约束**：只写「业务层自己扩展的」内容——业务 API 接口中自定义的方法、Controller 中自定义的端点（含权限注解实现）、Service public 方法（非框架接口方法）。
+不写框架标准端点（init/add/get/update/delete/deleteAll/list/meta 等 default 方法），这些在部署 SKILL 中已说明。
+
+对于 API 接口层：
+- **写**：业务接口中自定义扩展的方法（如 copy、loadParentNode、checkHasTemplate 等）
+- **不写**：从框架接口继承来的标准方法
+
+对于 Controller 层：
+- **写**：业务自定义端点（如 /copy、/findCategoryTree、/publish 等）及其完整权限注解
+- **不写**：框架 default 端点（如 /tree（继承）、/meta（继承）等，部署 SKILL 已说明）
+
+对于 Service 层：
+- **写**：public 方法中属于业务逻辑的（如 fillTreeNodeParent、copyByCategory、countByCategory 等）
+- **不写**：框架接口的标准方法实现
 
 1. **业务代码剥离**：同上，替换为占位符
 
-2. **生成 SKILL.md**，按序包含：
-   - frontmatter：name = `{机制名称}服务清单`；description 说明机制提供哪些业务能力
-   - **零、Maven 依赖**：调用方需要引入的依赖声明（groupId / artifactId / 引入模块 / 是否继承 BOM）
-   - **一、服务概览**：表格列出所有 API 接口 / Controller 路由，标注用途和调用时机
-   - **二、API 接口清单**：按接口分组，每个接口列出方法签名、参数语义、返回值、使用场景
-   - **三、Controller 路由清单**：按功能分组，每条路由列出 HTTP 方法 + 路径 + 请求/响应结构
-   - **四、使用约束**：调用前提条件、权限要求、事务边界说明
+2. **生成 SKILL.md**（索引文件，只含概览，细节下沉到 ref）：
+   - frontmatter：name = `{机制名称}服务清单`；description 说明业务层扩展了哪些能力
+   - **一、服务概览**：按实体域分组，每组列出 API 自定义方法数量、Controller 自定义端点数量，并注明对应 ref 文件
+   - **二、Service public 方法概览**：三列表格（Service 类 / 方法数量 / ref 链接），不列方法签名
+   - **三、工具类概览**：列出工具类名称、核心方法、ref 链接（如无工具类则省略）
+   - **四、权限角色与校验器速查**：核心角色常量表 + 校验器 ID 速查表（完整保留在 SKILL.md，作为调用方的快速参考）
+   > SKILL.md 是导航层，不承载方法签名和代码示例
 
-3. **生成 references/**：
-   - **ref-00-bundle-spec.md**：调用方代码中涉及的所有包导入，按依赖层分组，附调用方所需的完整 Maven 依赖片段；
-     所有后续 ref 文件的代码块只保留本类自模块的导入，跨模块导入统一在此声明。
-     **重点**：方法签名中用到的来自其他模块的 DTO/VO/常量（如请求体、响应体、枚举），必须在此文件中：
-     1. 声明其来源 Maven 依赖（groupId / artifactId）
-     2. 列出完整类名及包路径
-     3. 说明该类型属于哪个机制模块，避免调用方错误自行定义
-   - 每个主要接口或路由分组对应一个 ref 文件，包含完整方法签名和调用示例代码
+3. **生成 references/**（按实体域 + 横切关注点分文件）：
+
+   **分拆原则**：
+   - 以**实体域**为第一维度划分：每个核心实体（Category、Template 等）对应一个 ref 文件，该文件同时包含该实体的 API 接口方法 + Controller 端点（API 与 Controller 同属一个实体，合并在一个文件中，避免层次割裂）
+   - **Service public 方法** 独立一个 ref 文件（跨实体的内部调用逻辑，不属于接口层）
+   - **工具类** 独立一个 ref 文件（含完整代码模板，如无工具类则省略）
+   - **ref-00-bundle-spec.md**（必须）：调用方所需的跨模块 DTO/VO/枚举类型声明 + Maven 依赖片段；后续 ref 文件的代码块只保留本模块导入，跨模块导入统一在此声明
+
+   **ref 文件内容规范**：
+   - API 方法：列出方法签名（接口全限定名 + 方法签名 + 参数语义 + 返回语义）
+   - Controller 端点：列出 HTTP 方法 + 路径 + 权限注解（完整注解写法）+ 说明；特殊处理（如需手动声明 @PostMapping 的 search）须用"注意"块标注
+   - 代码示例：在 ref 文件末尾按"使用场景"组织，注释说明"为什么"而非"做什么"
 
 4. **输出目录**：
    product/skills/{机制名称}服务清单/
-   ├── SKILL.md
+   ├── SKILL.md                              ← 索引：概览表 + 权限速查
    └── references/
-       ├── ref-00-bundle-spec.md
-       ├── ref-01-{接口组语义}-api.md
-       └── ref-0N-{路由组语义}-controller.md
+       ├── ref-00-bundle-spec.md             ← 跨模块类型声明 + Maven 依赖
+       ├── ref-01-{实体A}-custom.md          ← 实体A：API 方法 + Controller 端点
+       ├── ref-02-{实体B}-custom.md          ← 实体B：API 方法 + Controller 端点
+       ├── ref-03-service-methods.md         ← 全部 Service public 方法
+       └── ref-04-utils.md                   ← 工具类代码模板（无工具类则省略）
 ```
 
 ---
