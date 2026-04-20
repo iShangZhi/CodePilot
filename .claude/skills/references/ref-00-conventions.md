@@ -13,22 +13,42 @@
 ## ref 文件命名
 
 ```
-ref-{序号}-{语义描述}-{后缀}.md
+ref-{序号}-{语义描述}.md
 ```
+
+序号 `00` 固定为 `bundle-spec`（跨模块类型声明），业务 ref 从 `01` 起。
+
+**部署 SKILL** 中的 ref 可选后缀：
 
 | 后缀 | 适用 | 示例 |
 |------|------|------|
 | `-spec` | 机制能力型 | `ref-01-category-spec.md` |
 | `-integration` | 引擎集成型 | `ref-01-form-integration.md` |
 
-序号 `00` 固定为 `conventions`，业务 ref 从 `01` 起。
+**服务清单 SKILL** 中的 ref 无固定后缀，按内容语义命名：
+
+| 典型文件 | 内容 |
+|---------|------|
+| `ref-01-{实体名}.md` | 实体外部可调用 API 方法 + 常用 /data/ 端点 |
+| `ref-02-service-methods.md` | 跨模块 Service public 方法 |
+| `ref-03-extension-points.md` | 业务扩展点（SPI / 监听器），无则省略 |
+| `ref-04-utils.md` | 工具类代码模板，无则省略 |
 
 ## ref 拆分原则
 
+**部署 SKILL**：
+
 | 情况 | 方式 |
 |------|------|
-| 有 Entity | 以 Entity 为切入点，覆盖 Entity → VO → API → Controller → Service → Repository |
+| 有 Entity | 以 Entity 为切入点，覆盖 Entity → VO → API（框架接口声明）→ Controller（框架 default 方法）→ Service（框架方法实现）→ Repository |
 | 无 Entity | 独立能力单独一个 ref（工具类 / 枚举 / 配置 / i18n） |
+
+**服务清单 SKILL**：
+
+| 维度 | 方式 |
+|------|------|
+| 以实体域为第一维度 | 每个核心实体一个 ref，含外部可调用 API（框架标准+自定义）和常用 /data/ 端点 |
+| 横切关注点 | service-methods / extension-points / utils 各独立一个 ref |
 
 ## ref 文件内部结构
 
